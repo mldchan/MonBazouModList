@@ -1,4 +1,11 @@
-﻿ModMenu/bin/
+﻿# Build Files
+
+ModMenu/bin/
 ModMenu/obj/
-.idea/
 ModMenu.sln.DotSettings.user
+
+# JetBrains Rider/ReSharper
+.idea/
+
+# Visual Studio
+.vs/
