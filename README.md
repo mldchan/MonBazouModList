@@ -21,3 +21,5 @@ All contributors will be listed here, but there are currently none! If you want 
 ## Contact the Author
 
 You can reach me on my [Discord server](https://mldkyt.nekoweb.org/discord/)! The discord server requires members to be verified by introducing themselves to the staff team, and the staff team will look at and verify all new members.
+
+We have a dedicated channel just for this project, and any discussion is welcome in that channel. Every single one of my projects has its own channel, and we also have general chat channels that are not related to any project.
