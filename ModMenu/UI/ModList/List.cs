@@ -1,7 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using BepInEx;
 using BepInEx.Bootstrap;
+using ModMenu.UI.ModList.Settings;
+using ModMenu.UI.ModList.Settings.Types;
 using ModMenu.UI.ModList.Structs;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -16,7 +20,8 @@ namespace ModMenu.UI.ModList
         public BaseUnityPlugin selectedMod;
         public InfoTab selectedTab;
 
-        public InfoTabStruct InfoTabStruct = new InfoTabStruct();
+        public InfoTabStruct InfoTabStruct;
+        public SettingsTabStruct SettingsTabStruct;
 
         public List<PluginInfo> mods;
 
@@ -34,20 +39,108 @@ namespace ModMenu.UI.ModList
             if (!showList) return;
 
             windowHeight = Screen.height - 200;
-            windowWidth = Screen.width - 500; // Leave space for the buttons on the right
+            windowWidth = Screen.width - 800; // Leave space for the buttons on the right
             if (selectedMod != null)
             {
+                if (GUI.Button(new Rect(100, 100, 100, 20), "Back"))
+                {
+                    selectedMod = null;
+                    selectedTab = InfoTab.Info;
+                    return;
+                }
+
                 switch (selectedTab)
                 {
                     case InfoTab.Info:
                         RenderAdvModInfo();
                         break;
+                    case InfoTab.Settings:
+                        RenderModSettings();
+                        break;
                 }
 
                 return;
             }
+            else if (SettingsTabStruct.hasInitialized)
+            {
+                SettingsTabStruct.hasInitialized = false;
+                SettingsTabStruct.settings.Clear();
+            }
 
             RenderModList();
+        }
+
+        private void RenderModSettings()
+        {
+            // Support Boolean, String, Integer, Float
+            // More types of settings may be added in the future
+
+            if (!SettingsTabStruct.hasInitialized)
+            {
+                InitializeSettingsTab();
+            }
+
+            GUI.Box(new Rect(100, 100, windowWidth, windowHeight), "Mod Settings");
+            
+            int y = 170;
+            foreach (var setting in SettingsTabStruct.settings)
+            {
+                setting.RenderSetting(ref y);
+            }
+        }
+
+        private void InitializeSettingsTab()
+        {
+            SettingsTabStruct.settings = new List<Setting>();
+            foreach (var config in selectedMod.Config)
+            {
+                // I wanna cry but I couldn't write a switch statement for this
+                if (config.Value.SettingType == typeof(Boolean))
+                {
+                    var boolSetting = new BooleanSetting();
+                    boolSetting.Initialize(config.Key.Key, config.Value.BoxedValue);
+                    boolSetting.ValueUpdated += (sender, o) =>
+                    {
+                        config.Value.BoxedValue = o;
+                    };
+                    SettingsTabStruct.settings.Add(boolSetting);
+                }
+                
+                else if (config.Value.SettingType == typeof(String))
+                {
+                    var stringSetting = new StringSetting();
+                    stringSetting.Initialize(config.Key.Key, config.Value.BoxedValue);
+                    stringSetting.ValueUpdated += (sender, o) =>
+                    {
+                        config.Value.BoxedValue = o;
+                    };
+                    SettingsTabStruct.settings.Add(stringSetting);
+                }
+                
+                else if (config.Value.SettingType == typeof(Int32))
+                {
+                    var intSetting = new IntegerSetting();
+                    intSetting.Initialize(config.Key.Key, config.Value.BoxedValue);
+                    intSetting.ValueUpdated += (sender, o) =>
+                    {
+                        config.Value.BoxedValue = o;
+                    };
+                    SettingsTabStruct.settings.Add(intSetting);
+                }
+                
+                else if (config.Value.SettingType == typeof(Single))
+                {
+                    var floatSetting = new FloatSetting();
+                    floatSetting.Initialize(config.Key.Key, config.Value.BoxedValue);
+                    floatSetting.ValueUpdated += (sender, o) =>
+                    {
+                        config.Value.BoxedValue = o;
+                    };
+                    SettingsTabStruct.settings.Add(floatSetting);
+                }
+            }
+
+            SettingsTabStruct.hasInitialized = true;
         }
 
         private void RenderAdvModInfo()

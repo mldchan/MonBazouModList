@@ -387,7 +387,13 @@
         <Compile Include="Properties\AssemblyInfo.cs"/>
         <Compile Include="UI\ModList\InfoTab.cs" />
         <Compile Include="UI\ModList\List.cs" />
+        <Compile Include="UI\ModList\Settings\Setting.cs" />
+        <Compile Include="UI\ModList\Settings\Types\BooleanSetting.cs" />
+        <Compile Include="UI\ModList\Settings\Types\FloatSetting.cs" />
+        <Compile Include="UI\ModList\Settings\Types\IntegerSetting.cs" />
+        <Compile Include="UI\ModList\Settings\Types\StringSetting.cs" />
         <Compile Include="UI\ModList\Structs\InfoTabStruct.cs" />
+        <Compile Include="UI\ModList\Structs\SettingsTabStruct.cs" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
