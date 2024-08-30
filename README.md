@@ -17,3 +17,7 @@ If you want to support me financially, I have an active Ko-fi page at https://ko
 ## Contributors
 
 All contributors will be listed here, but there are currently none! If you want to contribute, you can do so by following the steps above!
+
+## Contact the Author
+
+You can reach me on my [Discord server](https://mldkyt.nekoweb.org/discord/)! The discord server requires members to be verified by introducing themselves to the staff team, and the staff team will look at and verify all new members.
