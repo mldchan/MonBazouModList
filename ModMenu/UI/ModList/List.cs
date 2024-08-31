@@ -42,13 +42,6 @@ namespace ModMenu.UI.ModList
             windowWidth = Screen.width - 800; // Leave space for the buttons on the right
             if (selectedMod != null)
             {
-                if (GUI.Button(new Rect(100, 100, 100, 20), "Back"))
-                {
-                    selectedMod = null;
-                    selectedTab = InfoTab.Info;
-                    return;
-                }
-
                 switch (selectedTab)
                 {
                     case InfoTab.Info:
@@ -81,6 +74,13 @@ namespace ModMenu.UI.ModList
             }
 
             GUI.Box(new Rect(100, 100, windowWidth, windowHeight), "Mod Settings");
+            
+            if (GUI.Button(new Rect(100, 100, 100, 20), "Back"))
+            {
+                selectedMod = null;
+                selectedTab = InfoTab.Info;
+                return;
+            }
             
             int y = 170;
             foreach (var setting in SettingsTabStruct.settings)
@@ -148,6 +148,14 @@ namespace ModMenu.UI.ModList
             var metadata = selectedMod.Info.Metadata;
             GUI.Box(new Rect(100, 100, windowWidth, windowHeight),
                 $"Mod Information - {metadata.Name} {metadata.Version}");
+            
+            if (GUI.Button(new Rect(110, 110, 100, 20), "Back"))
+            {
+                selectedMod = null;
+                selectedTab = InfoTab.Info;
+                return;
+            }
+            
 
             GUI.Label(new Rect(110, 110, windowWidth - 20, 20), $"{metadata.Name}");
             GUI.Label(new Rect(110, 130, windowWidth - 20, 20), $"{metadata.GUID}");
