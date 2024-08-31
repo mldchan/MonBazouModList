@@ -221,6 +221,11 @@ namespace ModMenu.UI.ModList
         {
             GUI.Box(new Rect(100, 100, windowWidth, windowHeight), "Mod List");
 
+            if (GUI.Button(new Rect(windowWidth + 60, 110, 30, 20), "X"))
+            {
+                showList = false;
+            }
+
             int y = 100;
 
             foreach (var mod in mods)
