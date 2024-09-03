@@ -393,7 +393,7 @@
         <Compile Include="UI\Console\Patches\DebugLogErrorPatch.cs" />
         <Compile Include="UI\Console\Patches\DebugLogPatch.cs" />
         <Compile Include="UI\Console\Patches\DebugLogWarningPatch.cs" />
-        <Compile Include="UI\ModList\InfoTab.cs" />
+        <Compile Include="UI\ModList\Enums\Tab.cs" />
         <Compile Include="UI\ModList\List.cs" />
         <Compile Include="UI\ModList\Settings\Setting.cs" />
         <Compile Include="UI\ModList\Settings\Types\BooleanSetting.cs" />

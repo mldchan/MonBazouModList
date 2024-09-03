@@ -1,6 +1,6 @@
 ﻿namespace ModMenu.UI.ModList
 {
-    public enum InfoTab
+    public enum Tab
     {
         Info,
         Settings

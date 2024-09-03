@@ -18,7 +18,7 @@ namespace ModMenu.UI.ModList
         public bool showList;
 
         public BaseUnityPlugin selectedMod;
-        public InfoTab selectedTab;
+        public Tab selectedTab;
 
         public InfoTabStruct InfoTabStruct;
         public SettingsTabStruct SettingsTabStruct;
@@ -44,10 +44,10 @@ namespace ModMenu.UI.ModList
             {
                 switch (selectedTab)
                 {
-                    case InfoTab.Info:
+                    case Tab.Info:
                         RenderAdvModInfo();
                         break;
-                    case InfoTab.Settings:
+                    case Tab.Settings:
                         RenderModSettings();
                         break;
                 }
@@ -78,13 +78,20 @@ namespace ModMenu.UI.ModList
             if (GUI.Button(new Rect(100, 100, 100, 20), "Back"))
             {
                 selectedMod = null;
-                selectedTab = InfoTab.Info;
+                selectedTab = Tab.Info;
                 return;
             }
             
             int y = 170;
+            var category = "";
             foreach (var setting in SettingsTabStruct.settings)
             {
+                if (category != setting.Category)
+                {
+                    GUI.Label(new Rect(110, y, windowWidth - 20, 20), $"[{setting.Category}]");
+                    category = setting.Category;
+                    y += 20;
+                }
                 setting.RenderSetting(ref y);
             }
         }
@@ -98,7 +105,7 @@ namespace ModMenu.UI.ModList
                 if (config.Value.SettingType == typeof(Boolean))
                 {
                     var boolSetting = new BooleanSetting();
-                    boolSetting.Initialize(config.Key.Key, config.Value.BoxedValue);
+                    boolSetting.Initialize(config.Key.Key, config.Value.BoxedValue, config.Value.Description.Description, config.Key.Section);
                     boolSetting.ValueUpdated += (sender, o) =>
                     {
                         config.Value.BoxedValue = o;
@@ -109,7 +116,7 @@ namespace ModMenu.UI.ModList
                 else if (config.Value.SettingType == typeof(String))
                 {
                     var stringSetting = new StringSetting();
-                    stringSetting.Initialize(config.Key.Key, config.Value.BoxedValue);
+                    stringSetting.Initialize(config.Key.Key, config.Value.BoxedValue, config.Value.Description.Description, config.Key.Section);
                     stringSetting.ValueUpdated += (sender, o) =>
                     {
                         config.Value.BoxedValue = o;
@@ -120,7 +127,7 @@ namespace ModMenu.UI.ModList
                 else if (config.Value.SettingType == typeof(Int32))
                 {
                     var intSetting = new IntegerSetting();
-                    intSetting.Initialize(config.Key.Key, config.Value.BoxedValue);
+                    intSetting.Initialize(config.Key.Key, config.Value.BoxedValue, config.Value.Description.Description, config.Key.Section);
                     intSetting.ValueUpdated += (sender, o) =>
                     {
                         config.Value.BoxedValue = o;
@@ -131,7 +138,7 @@ namespace ModMenu.UI.ModList
                 else if (config.Value.SettingType == typeof(Single))
                 {
                     var floatSetting = new FloatSetting();
-                    floatSetting.Initialize(config.Key.Key, config.Value.BoxedValue);
+                    floatSetting.Initialize(config.Key.Key, config.Value.BoxedValue, config.Value.Description.Description, config.Key.Section);
                     floatSetting.ValueUpdated += (sender, o) =>
                     {
                         config.Value.BoxedValue = o;
@@ -141,6 +148,7 @@ namespace ModMenu.UI.ModList
             }
 
             SettingsTabStruct.hasInitialized = true;
+            SettingsTabStruct.settings = SettingsTabStruct.settings.OrderBy(setting => setting.Category).ToList();
         }
 
         private void RenderAdvModInfo()
@@ -152,7 +160,7 @@ namespace ModMenu.UI.ModList
             if (GUI.Button(new Rect(110, 110, 100, 20), "Back"))
             {
                 selectedMod = null;
-                selectedTab = InfoTab.Info;
+                selectedTab = Tab.Info;
                 return;
             }
             
@@ -242,13 +250,13 @@ namespace ModMenu.UI.ModList
             if (GUI.Button(new Rect(110, y + 30, 100, 20), "Information"))
             {
                 selectedMod = mod.Instance;
-                selectedTab = InfoTab.Info;
+                selectedTab = Tab.Info;
             }
 
             if (GUI.Button(new Rect(210, y + 30, 100, 20), "Settings"))
             {
                 selectedMod = mod.Instance;
-                selectedTab = InfoTab.Settings;
+                selectedTab = Tab.Settings;
             }
         }
     }
