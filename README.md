@@ -4,8 +4,8 @@
 
 ## Planned/Current Features:
 
-- [ ] **Mod List**: A mod list displays a list of mods, allows disabling of mods that support it, displays additional information, and allows changing configurations of mods, all from within the game.
-- [ ] **Console**: A console that connects to Unity's Debug.Log function and allows you to log debug messages and view them in-game instead of having to alt-tab to the console window. Also have the console pop up when a mod fails.
+- [X] **Mod List**: A mod list displays a list of mods, allows disabling of mods that support it, displays additional information, and allows changing configurations of mods, all from within the game.
+- [X] **Console**: A console that connects to Unity's Debug.Log function and allows you to log debug messages and view them in-game instead of having to alt-tab to the console window. Also have the console pop up when a mod fails.
 - [ ] **More features, up to your suggestions!** More features, up to your suggestions! Discuss new features or problems in the Discussions tab!
 
 ## Contributing
