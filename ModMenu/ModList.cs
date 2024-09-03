@@ -2,6 +2,7 @@
 using BepInEx;
 using HarmonyLib;
 using Michsky.MUIP;
+using ModMenu.UI.Configuration;
 using ModMenu.UI.ModList;
 using UnityEngine;
 using UnityEngine.Events;
@@ -18,6 +19,8 @@ namespace ModMenu
         
         void Awake()
         {
+            Configuration.Initialize(Config);
+            
             new Harmony("me.mldkyt.monbazoumodlist").PatchAll();
 
             Debug.Log("[ModMenu]Welcome!");

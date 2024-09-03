@@ -7,7 +7,7 @@ namespace ModMenu.UI.Console
     public class Console : MonoBehaviour
     {
         public static Console Instance { get; set; }
-        public bool IsOpen { get; set; }
+        public bool IsOpen { get; set; } = Configuration.Configuration.Console.showConsoleOnStartup;
 
         private List<string> _entries = new List<string>();
 
@@ -29,26 +29,43 @@ namespace ModMenu.UI.Console
         private void OnGUI()
         {
             if (!IsOpen) return;
-            
+
             GUI.Box(new Rect(10, 10, 1000, 400), "Console");
-            
+
             for (var i = 0; i < _entries.Count; i++)
             {
                 if (_entries[i].Contains("[WARNING]")) GUI.color = Color.yellow;
                 if (_entries[i].Contains("[ERROR]")) GUI.color = Color.red;
-                
+
                 GUI.Label(new Rect(20, 30 + i * 20, 1000, 20), _entries[i]);
-                
+
                 GUI.color = Color.white;
             }
         }
-        
+
         public static void Log(ConsoleTypes type, string message)
         {
+            switch (type)
+            {
+                case ConsoleTypes.Error when Configuration.Configuration.Console.showConsoleWhen == "Error":
+                    Instance.IsOpen = true;
+                    break;
+                case ConsoleTypes.Warning when Configuration.Configuration.Console.showConsoleWhen == "Warning":
+                case ConsoleTypes.Error when Configuration.Configuration.Console.showConsoleWhen == "Warning":
+                    Instance.IsOpen = true;
+                    break;
+                case ConsoleTypes.Log when Configuration.Configuration.Console.showConsoleWhen == "Log":
+                case ConsoleTypes.Warning when Configuration.Configuration.Console.showConsoleWhen == "Log":
+                case ConsoleTypes.Error when Configuration.Configuration.Console.showConsoleWhen == "Log":
+                    Instance.IsOpen = true;
+                    break;
+            }
+
             if (Instance == null) return;
             if (Instance._entries.Count > 16)
                 Instance._entries.RemoveAt(0);
-            Instance._entries.Add($"[{DateTime.Now:yyyy/MM/dd (dddd) HH:mm:ss}] [{type.ToString().ToUpper()}] {message}");
+            Instance._entries.Add(
+                $"[{DateTime.Now:yyyy/MM/dd (dddd) HH:mm:ss}] [{type.ToString().ToUpper()}] {message}");
         }
     }
 }

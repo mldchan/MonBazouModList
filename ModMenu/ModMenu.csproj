@@ -388,6 +388,8 @@
     <ItemGroup>
         <Compile Include="ModList.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
+        <Compile Include="UI\Configuration\Configuration.cs" />
+        <Compile Include="UI\Configuration\Structs\Console.cs" />
         <Compile Include="UI\Console\Console.cs" />
         <Compile Include="UI\Console\ConsoleTypes.cs" />
         <Compile Include="UI\Console\Patches\DebugLogErrorPatch.cs" />
