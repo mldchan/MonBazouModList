@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using BepInEx;
 using BepInEx.Bootstrap;
+using ModList.UI.ModList.Settings.Types;
 using ModMenu.UI.ModList.Settings;
 using ModMenu.UI.ModList.Settings.Types;
 using ModMenu.UI.ModList.Structs;

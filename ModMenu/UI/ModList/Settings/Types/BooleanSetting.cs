@@ -1,6 +1,7 @@
-﻿using UnityEngine;
+﻿using ModMenu.UI.ModList.Settings;
+using UnityEngine;
 
-namespace ModMenu.UI.ModList.Settings.Types
+namespace ModList.UI.ModList.Settings.Types
 {
     public class BooleanSetting : Setting
     {

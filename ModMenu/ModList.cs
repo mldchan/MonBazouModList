@@ -1,21 +1,25 @@
 ﻿using System;
 using BepInEx;
+using HarmonyLib;
 using Michsky.MUIP;
 using ModMenu.UI.ModList;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Localization.Components;
 using UnityEngine.SceneManagement;
+using Console = ModMenu.UI.Console.Console;
 
 namespace ModMenu
 {
-    [BepInPlugin("me.mldkyt.monbazoumodmenu", "Mod Menu", "1.0")]
-    public class ModMenu : BaseUnityPlugin
+    [BepInPlugin("me.mldkyt.monbazoumodlist", "Mod List", "1.0")]
+    public class ModList : BaseUnityPlugin
     {
         public List modList;
         
         void Awake()
         {
+            new Harmony("me.mldkyt.monbazoumodlist").PatchAll();
+
             Debug.Log("[ModMenu]Welcome!");
             SceneManager.sceneLoaded += (arg0, mode) =>
             {
@@ -24,7 +28,15 @@ namespace ModMenu
                     Debug.Log("[ModMenu]Loading Main Menu stuff...");
                     OnMainMenuLoad();
                 }
+
+                SpawnConsole();
             };
+        }
+
+        private void SpawnConsole()
+        {
+            if (Console.Instance != null) return;
+            Console.Instance = new GameObject("Console").AddComponent<Console>();
         }
 
         private void OnMainMenuLoad()

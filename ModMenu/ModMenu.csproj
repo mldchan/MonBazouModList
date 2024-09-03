@@ -33,6 +33,9 @@
         <WarningLevel>4</WarningLevel>
     </PropertyGroup>
     <ItemGroup>
+        <Reference Include="0Harmony">
+          <HintPath>A:\SteamLibrary\steamapps\common\MonBazou\BepInEx\core\0Harmony.dll</HintPath>
+        </Reference>
         <Reference Include="Assembly-CSharp">
           <HintPath>A:\SteamLibrary\steamapps\common\MonBazou\Mon Bazou_Data\Managed\Assembly-CSharp.dll</HintPath>
           <Private>False</Private>
@@ -383,8 +386,13 @@
         </Reference>
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="ModMenu.cs" />
+        <Compile Include="ModList.cs" />
         <Compile Include="Properties\AssemblyInfo.cs"/>
+        <Compile Include="UI\Console\Console.cs" />
+        <Compile Include="UI\Console\ConsoleTypes.cs" />
+        <Compile Include="UI\Console\Patches\DebugLogErrorPatch.cs" />
+        <Compile Include="UI\Console\Patches\DebugLogPatch.cs" />
+        <Compile Include="UI\Console\Patches\DebugLogWarningPatch.cs" />
         <Compile Include="UI\ModList\InfoTab.cs" />
         <Compile Include="UI\ModList\List.cs" />
         <Compile Include="UI\ModList\Settings\Setting.cs" />
