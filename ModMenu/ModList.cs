@@ -4,6 +4,8 @@ using HarmonyLib;
 using Michsky.MUIP;
 using ModMenu.UI.Configuration;
 using ModMenu.UI.ModList;
+using ModMenu.UI.UpdateAvailable;
+using ModMenu.UpdateChecker;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Localization.Components;
@@ -15,7 +17,11 @@ namespace ModMenu
     [BepInPlugin("me.mldkyt.monbazoumodlist", "Mod List", "1.0")]
     public class ModList : BaseUnityPlugin
     {
+        public const int VERSION = 1;
+        public const string VERSION_STRING = "1.1.0";
+        
         public List modList;
+        public UpdateAvailableDialog updateChecker;
         
         void Awake()
         {
@@ -75,6 +81,12 @@ namespace ModMenu
             {
                 var go = new GameObject("Mod List");
                 modList = go.AddComponent<List>();
+            }
+
+            if (updateChecker == null)
+            {
+                var go = new GameObject("Update Checker");
+                updateChecker = go.AddComponent<UpdateAvailableDialog>();
             }
             
             void OpenModMenu()

@@ -404,6 +404,9 @@
         <Compile Include="UI\ModList\Settings\Types\StringSetting.cs" />
         <Compile Include="UI\ModList\Structs\InfoTabStruct.cs" />
         <Compile Include="UI\ModList\Structs\SettingsTabStruct.cs" />
+        <Compile Include="UI\UpdateAvailable\UpdateAvailableDialog.cs" />
+        <Compile Include="UpdateChecker\UpdateCheck.cs" />
+        <Compile Include="UpdateChecker\VersionInfo.cs" />
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets"/>
     <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
