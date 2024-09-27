@@ -11,7 +11,7 @@ namespace ModMenu.UI.ModList.Settings
         public event EventHandler<object> ValueUpdated; 
         
         public abstract void Initialize(string name, object value, string comment, string category);
-        public abstract void RenderSetting(ref int y);
+        public abstract void RenderSetting();
 
         protected virtual void InvokeValueUpdated()
         {

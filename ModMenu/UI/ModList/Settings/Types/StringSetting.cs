@@ -13,29 +13,31 @@ namespace ModMenu.UI.ModList.Settings.Types
             Category = category;
             currentValue = value;
         }
-        
+
         private object currentValue;
 
-        public override void RenderSetting(ref int y)
+        public override void RenderSetting()
         {
-            GUI.Label(new Rect(140, y, 150, 20), Name);
-            Value = GUI.TextField(new Rect(320, y, 200, 20), (string) Value);
+            GUILayout.BeginHorizontal();
+            
+            GUILayout.Space(30);
+            GUILayout.Label(Name, GUILayout.Width(300));
+            Value = GUILayout.TextField((string)Value, GUILayout.Width(100));
             if (Value != currentValue)
             {
                 currentValue = Value;
                 InvokeValueUpdated();
             }
-            y += 20;
 
             if (!string.IsNullOrEmpty(Comment))
             {
-                var windowWidth = Screen.width - 800;
+                GUILayout.Space(5);
                 GUI.color = Color.gray;
-                GUI.Label(new Rect(200, y, windowWidth - 100, 20), Comment);
+                GUILayout.Label(Comment);
                 GUI.color = Color.white;
-
-                y += 20;
             }
+            
+            GUILayout.EndHorizontal();
         }
     }
 }

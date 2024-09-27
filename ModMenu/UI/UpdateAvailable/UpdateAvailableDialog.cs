@@ -49,7 +49,7 @@ namespace ModMenu.UI.UpdateAvailable
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("Download"))
             {
-                Application.OpenURL("https://mldkyt.nekoweb.org/config/MonBazouModList/MonBazouModList.dll");
+                Application.OpenURL("https://www.nexusmods.com/monbazou/mods/288?tab=files");
             }
 
             if (GUILayout.Button("Close"))

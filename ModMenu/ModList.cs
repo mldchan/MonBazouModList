@@ -32,6 +32,12 @@ namespace ModMenu
             Debug.Log("[ModMenu]Welcome!");
             SceneManager.sceneLoaded += (arg0, mode) =>
             {
+                if (arg0.buildIndex == 0 && Configuration.Startup.skipLoadingScreen)
+                {
+                    SceneManager.LoadScene(1);
+                    return;
+                }
+                
                 if (arg0.buildIndex == 1)
                 {
                     Debug.Log("[ModMenu]Loading Main Menu stuff...");
@@ -83,7 +89,7 @@ namespace ModMenu
                 modList = go.AddComponent<List>();
             }
 
-            if (updateChecker == null)
+            if (Configuration.Startup.checkForUpdates && updateChecker == null)
             {
                 var go = new GameObject("Update Checker");
                 updateChecker = go.AddComponent<UpdateAvailableDialog>();

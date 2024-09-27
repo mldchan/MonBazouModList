@@ -19,10 +19,13 @@ namespace ModMenu.UI.ModList.Settings.Types
         
         public object currentValue;
 
-        public override void RenderSetting(ref int y)
+        public override void RenderSetting()
         {
-            GUI.Label(new Rect(140, y, 150, 20), Name);
-            indeterminateSetting = GUI.TextField(new Rect(320, y, 200, 20), indeterminateSetting);
+            GUILayout.BeginHorizontal();
+            
+            GUILayout.Space(30);
+            GUILayout.Label(Name, GUILayout.Width(300));
+            indeterminateSetting = GUILayout.TextField(indeterminateSetting, GUILayout.Width(100));
             if (error) GUI.color = Color.red;
 
             if (int.TryParse(indeterminateSetting, out var result))
@@ -40,16 +43,15 @@ namespace ModMenu.UI.ModList.Settings.Types
 
             GUI.color = Color.white;
 
-            y += 20;
             if (!string.IsNullOrEmpty(Comment))
             {
-                var windowWidth = Screen.width - 800;
+                GUILayout.Space(5);
                 GUI.color = Color.gray;
-                GUI.Label(new Rect(200, y, windowWidth - 100, 20), Comment);
+                GUILayout.Label(Comment);
                 GUI.color = Color.white;
-                
-                y += 20;
             }
+            
+            GUILayout.EndHorizontal();
         }
     }
 }

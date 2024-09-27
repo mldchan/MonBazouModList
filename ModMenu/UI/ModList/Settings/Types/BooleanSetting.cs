@@ -13,14 +13,17 @@ namespace ModList.UI.ModList.Settings.Types
             Category = category;
             currentValue = value;
         }
-        
+
         public object currentValue;
 
-        public override void RenderSetting(ref int y)
+        public override void RenderSetting()
         {
-            var val = (bool) Value;
+            var val = (bool)Value;
+
+            GUILayout.BeginHorizontal();
             
-            Value = GUI.Toggle(new Rect(140, y, 350, 20), val, Name);
+            GUILayout.Space(30);
+            Value = GUILayout.Toggle(val, Name, GUILayout.Width(400));
 
             if (currentValue != Value)
             {
@@ -28,16 +31,15 @@ namespace ModList.UI.ModList.Settings.Types
                 InvokeValueUpdated();
             }
 
-            y += 20;
-
             if (!string.IsNullOrEmpty(Comment))
             {
-                var windowWidth = Screen.width - 800;
+                GUILayout.Space(5);
                 GUI.color = Color.gray;
-                GUI.Label(new Rect(200, y, windowWidth - 100, 20), Comment);
+                GUILayout.Label(Comment);
                 GUI.color = Color.white;
-                y += 20;
             }
+            
+            GUILayout.EndHorizontal();
         }
     }
 }

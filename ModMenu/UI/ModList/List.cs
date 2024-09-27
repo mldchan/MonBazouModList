@@ -28,6 +28,8 @@ namespace ModMenu.UI.ModList
         public int page;
         public int windowHeight;
         public int windowWidth;
+        public int windowX;
+        public int windowY;
 
         private void Awake()
         {
@@ -38,8 +40,10 @@ namespace ModMenu.UI.ModList
         {
             if (!showList) return;
 
-            windowHeight = Screen.height - 200;
-            windowWidth = Screen.width - 800; // Leave space for the buttons on the right
+            windowHeight = Mathf.Clamp(Screen.height - 200, 200, Screen.height);
+            windowWidth = Mathf.Clamp(Screen.width - 1000, 200, Screen.width);
+            windowX = Mathf.Clamp((Screen.width - windowWidth) / 2, 0, Screen.width - windowWidth);
+            windowY = Mathf.Clamp(100, 0, Screen.height - windowHeight);
             if (selectedMod != null)
             {
                 switch (selectedTab)
@@ -73,27 +77,29 @@ namespace ModMenu.UI.ModList
                 InitializeSettingsTab();
             }
 
-            GUI.Box(new Rect(100, 100, windowWidth, windowHeight), "Mod Settings");
-            
-            if (GUI.Button(new Rect(100, 100, 100, 20), "Back"))
+            GUILayout.BeginArea(new Rect(windowX, windowY, windowWidth, windowHeight), "Mod Settings", GUI.skin.box);
+
+            if (GUILayout.Button("Back", GUILayout.Width(100)))
             {
                 selectedMod = null;
                 selectedTab = Tab.Info;
+                GUILayout.EndArea();
                 return;
             }
-            
-            int y = 170;
+
             var category = "";
             foreach (var setting in SettingsTabStruct.settings)
             {
                 if (category != setting.Category)
                 {
-                    GUI.Label(new Rect(110, y, windowWidth - 20, 20), $"[{setting.Category}]");
+                    GUILayout.Label($"[{setting.Category}]", GUILayout.Width(windowWidth - 20));
                     category = setting.Category;
-                    y += 20;
                 }
-                setting.RenderSetting(ref y);
+
+                setting.RenderSetting();
             }
+
+            GUILayout.EndArea();
         }
 
         private void InitializeSettingsTab()
@@ -105,44 +111,36 @@ namespace ModMenu.UI.ModList
                 if (config.Value.SettingType == typeof(Boolean))
                 {
                     var boolSetting = new BooleanSetting();
-                    boolSetting.Initialize(config.Key.Key, config.Value.BoxedValue, config.Value.Description.Description, config.Key.Section);
-                    boolSetting.ValueUpdated += (sender, o) =>
-                    {
-                        config.Value.BoxedValue = o;
-                    };
+                    boolSetting.Initialize(config.Key.Key, config.Value.BoxedValue,
+                        config.Value.Description.Description, config.Key.Section);
+                    boolSetting.ValueUpdated += (sender, o) => { config.Value.BoxedValue = o; };
                     SettingsTabStruct.settings.Add(boolSetting);
                 }
-                
+
                 else if (config.Value.SettingType == typeof(String))
                 {
                     var stringSetting = new StringSetting();
-                    stringSetting.Initialize(config.Key.Key, config.Value.BoxedValue, config.Value.Description.Description, config.Key.Section);
-                    stringSetting.ValueUpdated += (sender, o) =>
-                    {
-                        config.Value.BoxedValue = o;
-                    };
+                    stringSetting.Initialize(config.Key.Key, config.Value.BoxedValue,
+                        config.Value.Description.Description, config.Key.Section);
+                    stringSetting.ValueUpdated += (sender, o) => { config.Value.BoxedValue = o; };
                     SettingsTabStruct.settings.Add(stringSetting);
                 }
-                
+
                 else if (config.Value.SettingType == typeof(Int32))
                 {
                     var intSetting = new IntegerSetting();
-                    intSetting.Initialize(config.Key.Key, config.Value.BoxedValue, config.Value.Description.Description, config.Key.Section);
-                    intSetting.ValueUpdated += (sender, o) =>
-                    {
-                        config.Value.BoxedValue = o;
-                    };
+                    intSetting.Initialize(config.Key.Key, config.Value.BoxedValue, config.Value.Description.Description,
+                        config.Key.Section);
+                    intSetting.ValueUpdated += (sender, o) => { config.Value.BoxedValue = o; };
                     SettingsTabStruct.settings.Add(intSetting);
                 }
-                
+
                 else if (config.Value.SettingType == typeof(Single))
                 {
                     var floatSetting = new FloatSetting();
-                    floatSetting.Initialize(config.Key.Key, config.Value.BoxedValue, config.Value.Description.Description, config.Key.Section);
-                    floatSetting.ValueUpdated += (sender, o) =>
-                    {
-                        config.Value.BoxedValue = o;
-                    };
+                    floatSetting.Initialize(config.Key.Key, config.Value.BoxedValue,
+                        config.Value.Description.Description, config.Key.Section);
+                    floatSetting.ValueUpdated += (sender, o) => { config.Value.BoxedValue = o; };
                     SettingsTabStruct.settings.Add(floatSetting);
                 }
             }
@@ -154,110 +152,108 @@ namespace ModMenu.UI.ModList
         private void RenderAdvModInfo()
         {
             var metadata = selectedMod.Info.Metadata;
-            GUI.Box(new Rect(100, 100, windowWidth, windowHeight),
-                $"Mod Information - {metadata.Name} {metadata.Version}");
-            
-            if (GUI.Button(new Rect(110, 110, 100, 20), "Back"))
+            GUILayout.BeginArea(new Rect(windowX, windowY, windowWidth, windowHeight), "Mod Information", GUI.skin.box);
+
+            if (GUILayout.Button("Back", GUILayout.Width(100)))
             {
                 selectedMod = null;
                 selectedTab = Tab.Info;
                 return;
             }
-            
 
-            GUI.Label(new Rect(110, 110, windowWidth - 20, 20), $"{metadata.Name}");
-            GUI.Label(new Rect(110, 130, windowWidth - 20, 20), $"{metadata.GUID}");
-            GUI.Label(new Rect(110, 150, windowWidth - 20, 20), $"Version {metadata.Version}");
+            GUILayout.Label($"{metadata.Name}");
+            GUILayout.Label($"{metadata.GUID}");
+            GUILayout.Label($"Version {metadata.Version}");
 
             if (InfoTabStruct.showAdvancedInformation)
             {
-                int y = 170;
-                GUI.Label(new Rect(110, y, windowWidth - 20, 20), "Dependencies:");
-                y += 20;
-                AdvancedInfoDependencies(ref y);
+                GUILayout.Label("Dependencies:");
+                AdvancedInfoDependencies();
 
-                if (GUI.Button(new Rect(110, y, windowWidth - 20, 20), "Hide Advanced"))
+                if (GUILayout.Button("Hide Advanced"))
                 {
                     InfoTabStruct.showAdvancedInformation = false;
                 }
             }
             else
             {
-                if (GUI.Button(new Rect(110, 170, windowWidth - 20, 20), "Show Advanced"))
+                if (GUILayout.Button("Show Advanced"))
                 {
                     InfoTabStruct.showAdvancedInformation = true;
                 }
             }
+
+            GUILayout.EndArea();
         }
 
-        private void AdvancedInfoDependencies(ref int y)
+        private void AdvancedInfoDependencies()
         {
             if (InfoTabStruct.expandDependencies)
             {
                 foreach (var dependency in selectedMod.Info.Dependencies)
                 {
+                    GUILayout.BeginHorizontal();
                     var required = (dependency.Flags & BepInDependency.DependencyFlags.HardDependency) != 0
                         ? "(required)"
                         : "(optional)";
 
-                    GUI.Label(new Rect(120, y, windowWidth - 20, 20),
-                        $"Dependency: {dependency.DependencyGUID} {required}");
-                    y += 20;
-                    GUI.Label(new Rect(120, y, windowWidth - 20, 20), $"Minimum version: {dependency.MinimumVersion}");
-                    y += 20;
+                    GUILayout.Label($"Dependency: {dependency.DependencyGUID} {required}", GUILayout.Width(200));
+                    GUILayout.Label($"Minimum version: {dependency.MinimumVersion}", GUILayout.Width(200));
+                    GUILayout.EndHorizontal();
+                    GUILayout.Space(4);
                 }
 
-                if (GUI.Button(new Rect(120, y, windowWidth - 20, 20), "(collapse)"))
+                if (GUILayout.Button("(collapse)"))
                 {
                     InfoTabStruct.expandDependencies = false;
                 }
-
-                y += 20;
             }
             else
             {
-                if (GUI.Button(new Rect(120, y, windowWidth - 20, 20), "(expand)"))
+                if (GUILayout.Button("(expand)"))
                 {
                     InfoTabStruct.expandDependencies = true;
                 }
-
-                y += 20;
             }
         }
 
         private void RenderModList()
         {
-            GUI.Box(new Rect(100, 100, windowWidth, windowHeight), "Mod List");
+            var w = Screen.width / 2 - 200;
+            var h = Screen.height - 200;
+            GUILayout.BeginArea(new Rect(windowX, windowY, windowWidth, windowHeight), GUI.skin.box);
+            GUILayout.Label("Mod List");
 
-            if (GUI.Button(new Rect(windowWidth + 60, 110, 30, 20), "X"))
+            if (GUILayout.Button("X", GUILayout.Width(30)))
             {
                 showList = false;
             }
 
-            int y = 100;
-
             foreach (var mod in mods)
             {
-                RenderBasicModInfo(mod, y);
-                y += 50;
+                RenderBasicModInfo(mod);
             }
+
+            GUILayout.EndArea();
         }
 
-        private void RenderBasicModInfo(PluginInfo mod, int y)
+        private void RenderBasicModInfo(PluginInfo mod)
         {
-            GUI.Label(new Rect(110, y + 10, windowWidth - 20, 20),
-                $"{mod.Metadata.Name} <color=gray>({mod.Metadata.GUID}) {mod.Metadata.Version}</color>");
-            if (GUI.Button(new Rect(110, y + 30, 100, 20), "Information"))
+            GUILayout.Label($"{mod.Metadata.Name} <color=gray>({mod.Metadata.GUID}) {mod.Metadata.Version}</color>");
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button("Information", GUILayout.Width(100)))
             {
                 selectedMod = mod.Instance;
                 selectedTab = Tab.Info;
             }
 
-            if (GUI.Button(new Rect(210, y + 30, 100, 20), "Settings"))
+            if (GUILayout.Button("Settings", GUILayout.Width(100)))
             {
                 selectedMod = mod.Instance;
                 selectedTab = Tab.Settings;
             }
+
+            GUILayout.EndHorizontal();
         }
     }
 }

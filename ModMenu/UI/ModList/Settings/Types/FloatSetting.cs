@@ -17,13 +17,16 @@ namespace ModMenu.UI.ModList.Settings.Types
             intermediateValue = Value.ToString();
             currentValue = value;
         }
-        
+
         public object currentValue;
 
-        public override void RenderSetting(ref int y)
+        public override void RenderSetting()
         {
-            GUI.Label(new Rect(140, y, 150, 20), Name);
-            intermediateValue = GUI.TextField(new Rect(320, y, 200, 20), intermediateValue);
+            GUILayout.BeginHorizontal();
+            
+            GUILayout.Space(30);
+            GUILayout.Label(Name, GUILayout.Width(300));
+            intermediateValue = GUILayout.TextField(intermediateValue, GUILayout.Width(100));
             if (error) GUI.color = Color.red;
 
             if (float.TryParse(intermediateValue, out var result))
@@ -40,17 +43,16 @@ namespace ModMenu.UI.ModList.Settings.Types
             else error = true;
 
             GUI.color = Color.white;
-            
-            y+=20;
 
             if (!string.IsNullOrEmpty(Comment))
             {
-                var windowWidth = Screen.width - 800;
+                GUILayout.Space(5);
                 GUI.color = Color.gray;
-                GUI.Label(new Rect(200, y, windowWidth - 100, 20), Comment);
+                GUILayout.Label(Comment);
                 GUI.color = Color.white;
-                y+=20;
             }
+            
+            GUILayout.EndHorizontal();
         }
     }
 }
