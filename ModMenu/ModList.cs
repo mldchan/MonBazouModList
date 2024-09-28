@@ -19,7 +19,7 @@ namespace ModMenu
     public class ModList : BaseUnityPlugin
     {
         public const int VERSION = 1;
-        public const string VERSION_STRING = "1.1.0";
+        public const string VERSION_STRING = "1.2.0";
         
         public List modList;
         public UpdateAvailableDialog updateChecker;
