@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using BepInEx;
 using BepInEx.Bootstrap;
+using BepInEx.Configuration;
 using ModList.UI.ModList.Settings.Types;
+using ModMenu.UI.About;
 using ModMenu.UI.ModList.Settings;
 using ModMenu.UI.ModList.Settings.Types;
 using ModMenu.UI.ModList.Structs;
@@ -110,6 +112,11 @@ namespace ModMenu.UI.ModList
                 // I wanna cry but I couldn't write a switch statement for this
                 if (config.Value.SettingType == typeof(Boolean))
                 {
+                    if (config.Key.Key == "Enabled" && config.Key.Section == "General")
+                    {
+                        continue;
+                    }
+                    
                     var boolSetting = new BooleanSetting();
                     boolSetting.Initialize(config.Key.Key, config.Value.BoxedValue,
                         config.Value.Description.Description, config.Key.Section);
@@ -222,12 +229,22 @@ namespace ModMenu.UI.ModList
             var w = Screen.width / 2 - 200;
             var h = Screen.height - 200;
             GUILayout.BeginArea(new Rect(windowX, windowY, windowWidth, windowHeight), GUI.skin.box);
-            GUILayout.Label("Mod List");
+            GUILayout.BeginHorizontal();
+
+            if (GUILayout.Button("About Mod List", GUILayout.Width(100)))
+            {
+                AboutScreen.Instance.show = true;
+            }
+
+            GUILayout.Space(windowWidth - 150);
 
             if (GUILayout.Button("X", GUILayout.Width(30)))
             {
                 showList = false;
             }
+
+            GUILayout.EndHorizontal();
+            GUILayout.Label("Mod List");
 
             foreach (var mod in mods)
             {
@@ -251,6 +268,13 @@ namespace ModMenu.UI.ModList
             {
                 selectedMod = mod.Instance;
                 selectedTab = Tab.Settings;
+            }
+
+            // Enabled switch
+            if (mod.Instance.Config.Any(x => x.Key.Key == "Enabled" && x.Value.SettingType == typeof(Boolean)))
+            {
+                mod.Instance.Config[new ConfigDefinition("General", "Enabled")].BoxedValue = GUILayout.Toggle(
+                    (bool) mod.Instance.Config[new ConfigDefinition("General", "Enabled")].BoxedValue, "Enabled");
             }
 
             GUILayout.EndHorizontal();

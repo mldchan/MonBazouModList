@@ -24,8 +24,8 @@ namespace ModMenu.UI.ModList.Settings.Types
             GUILayout.BeginHorizontal();
             
             GUILayout.Space(30);
-            GUILayout.Label(Name, GUILayout.Width(300));
-            indeterminateSetting = GUILayout.TextField(indeterminateSetting, GUILayout.Width(100));
+            GUILayout.Label(Name, GUILayout.Width(150));
+            indeterminateSetting = GUILayout.TextField(indeterminateSetting, GUILayout.Width(250));
             if (error) GUI.color = Color.red;
 
             if (int.TryParse(indeterminateSetting, out var result))

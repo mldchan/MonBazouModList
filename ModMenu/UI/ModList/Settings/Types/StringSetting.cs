@@ -21,8 +21,8 @@ namespace ModMenu.UI.ModList.Settings.Types
             GUILayout.BeginHorizontal();
             
             GUILayout.Space(30);
-            GUILayout.Label(Name, GUILayout.Width(300));
-            Value = GUILayout.TextField((string)Value, GUILayout.Width(100));
+            GUILayout.Label(Name, GUILayout.Width(150));
+            Value = GUILayout.TextField((string)Value, GUILayout.Width(250));
             if (Value != currentValue)
             {
                 currentValue = Value;

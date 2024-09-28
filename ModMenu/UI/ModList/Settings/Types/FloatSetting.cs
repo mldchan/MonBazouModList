@@ -25,8 +25,8 @@ namespace ModMenu.UI.ModList.Settings.Types
             GUILayout.BeginHorizontal();
             
             GUILayout.Space(30);
-            GUILayout.Label(Name, GUILayout.Width(300));
-            intermediateValue = GUILayout.TextField(intermediateValue, GUILayout.Width(100));
+            GUILayout.Label(Name, GUILayout.Width(150));
+            intermediateValue = GUILayout.TextField(intermediateValue, GUILayout.Width(250));
             if (error) GUI.color = Color.red;
 
             if (float.TryParse(intermediateValue, out var result))
